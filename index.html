@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base target="_top">
 
   <style>
     * {
@@ -855,9 +854,21 @@
     let lastJutsuCode = null;
     let SOUNDS = {};
 
-    google.script.run
-      .withSuccessHandler(init)
-      .getGameData();
+    fetch("data.json")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erro ao carregar data.json");
+        }
+        return response.json();
+      })
+      .then(data => {
+        init(data);
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("loading").textContent =
+          "Erro ao carregar os dados do jogo.";
+      });
 
     function init(data) {
       DATA = data;
@@ -1466,7 +1477,6 @@
       timeModeEnabled = document.getElementById("timeModeInput").checked;
       comboModeEnabled = comboEnabled;
       comboSize = Math.max(2, Math.min(3, Math.floor(comboQty || 2)));
-      comboSize = Math.floor(comboQty || 2);
 
       updateProgress();
       closeSettings();
