@@ -1,0 +1,1899 @@
+!DOCTYPE html
+html
+head
+  base target=_top
+
+  style
+     {
+      box-sizing border-box;
+    }
+
+    body {
+      margin 0;
+      background #050505;
+      color #fff;
+      font-family Georgia, serif;
+    }
+
+    .app {
+      display grid;
+      grid-template-columns 320px 1fr 340px;
+      gap 20px;
+      min-height 100vh;
+      padding 18px;
+    }
+
+    .panel {
+      border 1px solid #3a2a0c;
+      border-radius 18px;
+      background #070707;
+      padding 24px;
+    }
+
+    .title {
+      color #d69b22;
+      text-align center;
+      letter-spacing 6px;
+      font-size 24px;
+      margin-bottom 24px;
+      text-transform uppercase;
+    }
+
+    .control-row,
+    .jutsu-row {
+      display flex;
+      align-items center;
+      gap 14px;
+      margin-bottom 14px;
+    }
+
+    .icon {
+      width 52px;
+      height 52px;
+      border-radius 8px;
+      object-fit cover;
+      background #222;
+      border 1px solid #333;
+    }
+
+    .small-icon {
+      width 42px;
+      height 42px;
+    }
+
+    .center {
+      position relative;
+      display flex;
+      flex-direction column;
+      align-items center;
+      justify-content center;
+      text-align center;
+    }
+
+    .language {
+      position absolute;
+      top 16px;
+      right 18px;
+      display flex;
+      gap 8px;
+    }
+
+    .lang-btn {
+      border 1px solid #704d17;
+      background #18040b;
+      color white;
+      border-radius 8px;
+      padding 6px 10px;
+      cursor pointer;
+      font-size 18px;
+    }
+
+    .lang-btn.active {
+      background #451021;
+    }
+
+    .game-name {
+      color #d69b22;
+      letter-spacing 6px;
+      font-size 34px;
+      margin-bottom 8px;
+      text-transform uppercase;
+    }
+
+    .elements-select {
+      display flex;
+      gap 12px;
+      margin 28px 0;
+      justify-content center;
+    }
+
+    .element-btn {
+      width 62px;
+      height 62px;
+      border-radius 10px;
+      border 1px solid #3a2a0c;
+      background #111;
+      padding 4px;
+      cursor pointer;
+      opacity 0.45;
+    }
+
+    .element-btn.selected {
+      opacity 1;
+      border-color #d69b22;
+      box-shadow 0 0 12px rgba(214,155,34,.45);
+    }
+
+    .element-btn img {
+      width 100%;
+      height 100%;
+      object-fit cover;
+      border-radius 6px;
+    }
+
+    .main-btn {
+      background #3b0719;
+      color #d69b22;
+      border 1px solid #875431;
+      border-radius 14px;
+      padding 16px 54px;
+      font-size 24px;
+      letter-spacing 3px;
+      font-family Georgia, serif;
+      cursor pointer;
+      text-transform uppercase;
+    }
+
+    .timer {
+      font-size 58px;
+      margin-bottom 4px;
+    }
+
+    .progress {
+      color #d69b22;
+      font-size 20px;
+      margin-bottom 24px;
+    }
+
+    .current-jutsu {
+      border 1px solid #3a2a0c;
+      border-radius 18px;
+      padding 20px 34px;
+      display flex;
+      align-items center;
+      gap 18px;
+      margin-bottom 28px;
+      min-width 360px;
+      justify-content center;
+    }
+
+    .current-jutsu-name {
+      font-size 30px;
+      letter-spacing 3px;
+      color #fff;
+    }
+
+    .sequence-boxes {
+      display flex;
+      gap 10px;
+      justify-content center;
+      margin-bottom 28px;
+      flex-wrap wrap;
+    }
+
+    .seq-box {
+      width 58px;
+      height 58px;
+      border-radius 8px;
+      border 1px solid #5c4312;
+      background #090909;
+      display flex;
+      align-items center;
+      justify-content center;
+    }
+
+    .seq-box img {
+      width 100%;
+      height 100%;
+      object-fit cover;
+      border-radius 6px;
+    }
+
+    .finished-title {
+      color #d69b22;
+      font-size 34px;
+      letter-spacing 5px;
+      margin-bottom 24px;
+      text-transform uppercase;
+    }
+
+    .final-time {
+      font-size 58px;
+      margin-bottom 28px;
+    }
+
+    .hidden {
+      display none !important;
+    }
+
+    .jutsu-list {
+      max-height calc(100vh - 110px);
+      overflow-y auto;
+      padding-right 6px;
+    }
+
+    .jutsu-name {
+      font-size 17px;
+    }
+
+    .jutsu-seq {
+      color #d69b22;
+      font-size 14px;
+      letter-spacing 2px;
+      text-transform uppercase;
+    }
+
+    .loading {
+      font-size 24px;
+      color #d69b22;
+      text-align center;
+      margin-top 80px;
+    }
+
+    .element-group {
+      margin-bottom 22px;
+    }
+
+    .element-group-title {
+      color #d69b22;
+      font-size 18px;
+      letter-spacing 3px;
+      text-transform uppercase;
+      margin 18px 0 12px;
+      border-bottom 1px solid #3a2a0c;
+      padding-bottom 6px;
+    }
+
+    .center.correct-flash {
+      box-shadow 0 0 28px rgba(40, 180, 80, 0.65);
+    }
+
+    .center.wrong-flash {
+      box-shadow 0 0 28px rgba(210, 40, 40, 0.65);
+    }
+
+    .menu-elements {
+      display flex;
+      gap 10px;
+      justify-content center;
+      margin -10px 0 22px;
+      flex-wrap wrap;
+    }
+
+    .menu-element-btn {
+      width 48px;
+      height 48px;
+      border-radius 9px;
+      border 1px solid #3a2a0c;
+      background #111;
+      padding 4px;
+      cursor pointer;
+      opacity 0.45;
+    }
+
+    .menu-element-btn.selected {
+      opacity 1;
+      border-color #d69b22;
+      box-shadow 0 0 12px rgba(214,155,34,.45);
+    }
+
+    .menu-element-btn img {
+      width 100%;
+      height 100%;
+      object-fit cover;
+      border-radius 6px;
+    }
+
+    .current-jutsu-icons {
+      display flex;
+      align-items center;
+      gap 10px;
+    }
+
+    .top-tools {
+      position absolute;
+      top 16px;
+      left 18px;
+      display flex;
+      gap 10px;
+      z-index 10;
+    }
+
+    .tool-btn {
+      width 52px;
+      height 52px;
+      border-radius 10px;
+      border 1px solid #704d17;
+      background #111;
+      color #d69b22;
+      font-size 26px;
+      cursor pointer;
+    }
+
+    .tool-btnhover {
+      box-shadow 0 0 12px rgba(214,155,34,.45);
+    }
+
+    .settings-btnhover {
+      box-shadow 0 0 12px rgba(214,155,34,.45);
+    }
+
+    .settings-modal {
+      position fixed;
+      inset 0;
+      background rgba(0,0,0,.75);
+      display flex;
+      align-items center;
+      justify-content center;
+      z-index 99;
+    }
+
+    .settings-box {
+      width 1000px;
+      max-width 92vw;
+      max-height 88vh;
+      overflow hidden;
+      border 1px solid #704d17;
+      border-radius 18px;
+      background #070707;
+      padding 24px;
+      display flex;
+      flex-direction column;
+    }
+
+    .settings-title {
+      color #d69b22;
+      letter-spacing 4px;
+      font-size 24px;
+      text-align center;
+      margin-bottom 18px;
+      text-transform uppercase;
+    }
+
+    .settings-jutsu-row {
+      display flex;
+      align-items center;
+      gap 12px;
+      padding 8px 0;
+      border-bottom 1px solid #1f1607;
+      cursor pointer;
+    }
+
+    .settings-jutsu-row input {
+      width 18px;
+      height 18px;
+    }
+
+    .settings-actions {
+      display flex;
+      gap 20px;
+      justify-content center;
+      background #070707;
+      padding-top 20px;
+      padding-bottom 10px;
+      flex-shrink 0;
+    }
+
+    .secondary-btn {
+      background #111;
+    }
+
+    .settings-list {
+      overflow-y auto;
+      padding-right 12px;
+      padding-bottom 20px;
+      flex 1;
+    }
+
+    .jutsus-header {
+      display flex;
+      align-items center;
+      justify-content center;
+      gap 14px;
+      margin-bottom 18px;
+    }
+
+    .jutsus-header .title {
+      margin-bottom 0;
+    }
+
+    .jutsus-settings-btn {
+      width 38px;
+      height 38px;
+      border-radius 9px;
+      border 1px solid #704d17;
+      background #111;
+      color #d69b22;
+      font-size 20px;
+      cursor pointer;
+    }
+
+    .jutsus-settings-btnhover {
+      box-shadow 0 0 12px rgba(214,155,34,.45);
+    }
+
+    .jutsu-list {
+      max-height calc(100vh - 150px);
+      overflow-y auto;
+      padding-right 8px;
+    }
+
+    .jutsu-list-webkit-scrollbar,
+    .settings-list-webkit-scrollbar {
+      width 10px;
+    }
+
+    .jutsu-list-webkit-scrollbar-track,
+    .settings-list-webkit-scrollbar-track {
+      background #090909;
+      border-radius 10px;
+    }
+
+    .jutsu-list-webkit-scrollbar-thumb,
+    .settings-list-webkit-scrollbar-thumb {
+      background #704d17;
+      border-radius 10px;
+      border 2px solid #090909;
+    }
+
+    .jutsu-list-webkit-scrollbar-thumbhover,
+    .settings-list-webkit-scrollbar-thumbhover {
+      background #d69b22;
+    }
+
+    .sidebar-settings-modal {
+      position fixed;
+      inset 0;
+      background rgba(0,0,0,.75);
+      display flex;
+      align-items center;
+      justify-content center;
+      z-index 98;
+    }
+
+    .sidebar-settings-box {
+      width 1000px;
+      max-width 92vw;
+      border 1px solid #704d17;
+      border-radius 18px;
+      background #070707;
+      padding 24px;
+    }
+
+    .sidebar-element-row {
+      display flex;
+      align-items center;
+      gap 12px;
+      padding 10px 0;
+      border-bottom 1px solid #1f1607;
+      cursor pointer;
+    }
+
+    .sidebar-element-row input {
+      width 18px;
+      height 18px;
+    }
+
+    .sidebar-settings-box .settings-actions {
+      gap 14px;
+      padding-top 20px;
+    }
+
+    .sidebar-settings-box .main-btn {
+      min-width 150px;
+      padding 14px 28px;
+      font-size 20px;
+      letter-spacing 3px;
+    }
+
+    .sidebar-settings-box #sidebarSelectAllBtn {
+      line-height 1.1;
+    }
+
+    .settings-tabs {
+      display flex;
+      justify-content center;
+      gap 12px;
+      margin-bottom 18px;
+    }
+
+    .settings-tab-btn {
+      border 1px solid #704d17;
+      background #111;
+      color #d69b22;
+      border-radius 10px;
+      padding 10px 26px;
+      font-family Georgia, serif;
+      font-size 18px;
+      letter-spacing 2px;
+      cursor pointer;
+      text-transform uppercase;
+    }
+
+    .settings-tab-btn.active {
+      background #3b0719;
+      box-shadow 0 0 12px rgba(214,155,34,.35);
+    }
+
+    .settings-panel {
+      flex 1;
+      overflow hidden;
+      display flex;
+      flex-direction column;
+    }
+
+    .game-settings-panel {
+      padding 18px 40px;
+      overflow-y auto;
+    }
+
+    .setting-row {
+      display flex;
+      align-items center;
+      justify-content space-between;
+      gap 24px;
+      border-bottom 1px solid #1f1607;
+      padding 18px 0;
+    }
+
+    .setting-label {
+      text-align left;
+    }
+
+    .setting-label strong {
+      color #d69b22;
+      font-size 20px;
+      letter-spacing 2px;
+    }
+
+    .setting-label div {
+      margin-top 6px;
+      color #ddd;
+      font-size 15px;
+    }
+
+    .setting-input {
+      width 120px;
+      background #111;
+      color #fff;
+      border 1px solid #704d17;
+      border-radius 10px;
+      padding 10px;
+      font-size 22px;
+      text-align center;
+      font-family Georgia, serif;
+    }
+
+    .setting-checkbox {
+      width 24px;
+      height 24px;
+    }
+
+    .sidebar-element-tabs {
+      display flex;
+      justify-content center;
+      gap 10px;
+      margin-bottom 18px;
+      flex-wrap wrap;
+    }
+
+    .sidebar-element-tab {
+      width 54px;
+      height 54px;
+      border-radius 10px;
+      border 1px solid #3a2a0c;
+      background #111;
+      padding 4px;
+      cursor pointer;
+      opacity 0.45;
+    }
+
+    .sidebar-element-tab.active {
+      opacity 1;
+      border-color #d69b22;
+      box-shadow 0 0 12px rgba(214,155,34,.45);
+    }
+
+    .sidebar-element-tab img {
+      width 100%;
+      height 100%;
+      object-fit cover;
+      border-radius 6px;
+    }
+
+    .sidebar-jutsu-row {
+      display flex;
+      align-items center;
+      gap 12px;
+      padding 9px 0;
+      border-bottom 1px solid #1f1607;
+      cursor pointer;
+    }
+
+    .sidebar-jutsu-row input {
+      width 18px;
+      height 18px;
+    }
+
+    .sidebar-jutsu-list {
+      max-height 48vh;
+      overflow-y auto;
+      padding-right 10px;
+    }
+
+    .sidebar-jutsu-list-webkit-scrollbar {
+      width 10px;
+    }
+
+    .sidebar-jutsu-list-webkit-scrollbar-track {
+      background #090909;
+      border-radius 10px;
+    }
+
+    .sidebar-jutsu-list-webkit-scrollbar-thumb {
+      background #704d17;
+      border-radius 10px;
+      border 2px solid #090909;
+    }
+
+    .sidebar-jutsu-list-webkit-scrollbar-thumbhover {
+      background #d69b22;
+    }
+
+    .current-combo-item {
+      display flex;
+      align-items center;
+      gap 14px;
+      opacity 0.45;
+    }
+
+    .current-combo-item.active {
+      opacity 1;
+    }
+
+    .current-combo-item.done {
+      opacity 0.75;
+    }
+
+    .combo-plus {
+      color #d69b22;
+      font-size 34px;
+      font-weight bold;
+      padding 0 4px;
+    }
+
+    .sequence-group {
+      display flex;
+      gap 10px;
+      opacity 0.35;
+    }
+
+    .sequence-group.active {
+      opacity 1;
+    }
+
+    .boxes-plus {
+      display flex;
+      align-items center;
+}
+  style
+head
+
+body
+  div id=loading class=loadingCarregando...div
+
+  div id=app class=app hidden
+    aside class=panel
+      div id=controlsTitle class=titleCONTROLESdiv
+      div id=controlsListdiv
+    aside
+
+    main class=panel center
+      div class=top-tools
+        button id=settingsBtn class=tool-btn title=Settings⚙button
+        button id=restartBtn class=tool-btn title=Restart↺button
+      div
+      div class=language
+        button id=ptBtn class=lang-btn active🇧🇷button
+        button id=enBtn class=lang-btn🇺🇸button
+      div
+
+      section id=startScreen
+        div id=gameName class=game-nameShinsei Jutsu Gamediv
+
+        div id=selectElementsText style=color#d69b22; letter-spacing3px;
+          Selecione os Elementos
+        div
+
+        div id=elementsSelect class=elements-selectdiv
+
+        button id=startBtn class=main-btnIniciarbutton
+      section
+
+      section id=gameScreen class=hidden
+        div id=timer class=timer0.00div
+        div id=progress class=progress0  10div
+
+        div class=current-jutsu
+          img id=currentJutsuIcon class=icon
+          div id=currentJutsuName class=current-jutsu-namediv
+        div
+
+        div id=sequenceBoxes class=sequence-boxesdiv
+      section
+
+      section id=finishScreen class=hidden
+        div id=finishedTitle class=finished-titleJogo Finalizadodiv
+        div id=finalTime class=final-time0.00sdiv
+        button id=playAgainBtn class=main-btnJogar Novamentebutton
+      section
+    main
+
+    aside class=panel
+      div class=jutsus-header
+        div id=jutsusTitle class=titleJUTSUSdiv
+        button id=jutsusSettingsBtn class=jutsus-settings-btn title=Jutsus settings⚙button
+      div
+
+      div id=jutsuList class=jutsu-listdiv
+    aside
+
+    div id=sidebarSettingsModal class=sidebar-settings-modal hidden
+      div class=sidebar-settings-box
+        div id=sidebarSettingsTitle class=settings-titleJutsus List Settingsdiv
+
+        div id=sidebarElementTabs class=sidebar-element-tabsdiv
+        div id=sidebarJutsusList class=sidebar-jutsu-listdiv
+
+        div class=settings-actions
+          button id=sidebarSelectAllBtn class=main-btn secondary-btnAllbutton
+          button id=sidebarSaveBtn class=main-btnSavebutton
+          button id=sidebarCloseBtn class=main-btn secondary-btnClosebutton
+        div
+      div
+    div
+
+    div id=settingsModal class=settings-modal hidden
+      div class=settings-box
+        div id=settingsTitle class=settings-titleTraining Settingsdiv
+
+        div class=settings-tabs
+          button id=settingsTabJutsus class=settings-tab-btn activeJutsusbutton
+          button id=settingsTabGame class=settings-tab-btnGamebutton
+        div
+
+        div id=settingsPanelJutsus class=settings-panel
+          div id=settingsJutsuList class=settings-listdiv
+        div
+
+        div id=settingsPanelGame class=settings-panel hidden
+          div class=game-settings-panel
+            div class=setting-row
+              div class=setting-label
+                strong id=totalJutsusLabelJutsus per gamestrong
+                div id=totalJutsusHelpChoose how many jutsus must be completed.div
+              div
+              input id=totalJutsusInput class=setting-input type=number min=2 step=1
+            div
+
+            div class=setting-row
+              div class=setting-label
+                strong id=timeModeLabelTime modestrong
+                div id=timeModeHelpIf enabled, waiting more than 1.5s between keys resets the current jutsu.div
+              div
+              input id=timeModeInput class=setting-checkbox type=checkbox
+            div
+
+            div class=setting-row
+              div class=setting-label
+                strong id=comboModeLabelCombo modestrong
+                div id=comboModeHelpIf enabled, each round requires multiple jutsus.div
+              div
+              input id=comboModeInput class=setting-checkbox type=checkbox
+            div
+
+            div class=setting-row
+              div class=setting-label
+                strong id=comboSizeLabelJutsus per roundstrong
+                div id=comboSizeHelpChoose how many jutsus are required to complete one round.div
+              div
+              input id=comboSizeInput class=setting-input type=number min=2 max=3 step=1
+            div
+          div
+        div
+
+        div class=settings-actions
+          button id=selectAllJutsusBtn class=main-btn secondary-btnAllbutton
+          button id=saveSettingsBtn class=main-btnSavebutton
+          button id=closeSettingsBtn class=main-btn secondary-btnClosebutton
+        div
+      div
+    div
+  div
+
+  script
+    let DATA = {};
+    let lang = pt;
+    let selectedMenuElement = null;
+
+    let selectedElements = [];
+    let selectedJutsus = [];
+    let availableJutsus = [];
+    let jutsuDeck = [];
+    let currentJutsu = null;
+    let currentInput = [];
+    let selectedSidebarJutsus = [];
+    let selectedSidebarFilterElements = [];
+
+    let totalJutsus = 10;
+    let timeModeEnabled = false;
+    let comboModeEnabled = false;
+    let comboSize = 2;
+
+    let inputTimeout = null;
+    const INPUT_TIME_LIMIT = 1500;
+
+    let currentCombo = [];
+    let currentComboIndex = 0;
+    let comboInputs = [];
+
+    let hits = 0;
+    let startTime = null;
+    let timerInterval = null;
+    let gameRunning = false;
+
+    let lastJutsuCode = null;
+    let SOUNDS = {};
+
+    google.script.run
+      .withSuccessHandler(init)
+      .getGameData();
+
+    function init(data) {
+      DATA = data;
+      lang = DATA.config.idioma_padrao  pt;
+      document.getElementById(ptBtn).classList.toggle(active, lang === pt);
+      document.getElementById(enBtn).classList.toggle(active, lang === en);
+      totalJutsus = Number(DATA.config.total_jutsus_partida  10);
+
+      selectedMenuElement =
+        DATA.elementos
+          .sort((a,b)=Number(a.ordem)-Number(b.ordem))[0]
+          .codigo;
+
+      selectedElements = DATA.elementos.map(e = e.codigo);
+      selectedSidebarJutsus = DATA.jutsus.map(j = j.codigo);
+      selectedSidebarFilterElements = DATA.elementos.map(e = e.codigo);
+
+      selectedJutsus = DATA.jutsus.map(j = j.codigo);
+
+      document.getElementById(loading).classList.add(hidden);
+      document.getElementById(app).classList.remove(hidden);
+
+      preloadSounds();
+      bindEvents();
+      renderAll();
+    }
+
+    function bindEvents() {
+      document.getElementById(ptBtn).addEventListener(click, () = {
+        setLang(pt);
+      });
+
+      document.getElementById(enBtn).addEventListener(click, () = {
+        setLang(en);
+      });
+
+      document.getElementById(startBtn).addEventListener(click, () = {
+        startGame();
+      });
+
+      document.getElementById(playAgainBtn).addEventListener(click, () = {
+        resetGame();
+      });
+
+      document.getElementById(settingsBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        openSettings();
+      });
+
+      document.getElementById(restartBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        restartToHome();
+      });
+
+      document.getElementById(closeSettingsBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        closeSettings();
+      });
+
+      document.getElementById(saveSettingsBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        saveSettings();
+      });
+
+      document.getElementById(selectAllJutsusBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        selectAllVisibleJutsus();
+      });
+
+      document.getElementById(settingsTabJutsus).addEventListener(click, (e) = {
+        e.stopPropagation();
+        showSettingsTab(jutsus);
+      });
+
+      document.getElementById(settingsTabGame).addEventListener(click, (e) = {
+        e.stopPropagation();
+        showSettingsTab(game);
+      });
+
+      document.getElementById(comboModeInput).addEventListener(change, () = {
+        toggleComboSizeInput();
+      });
+
+      document.getElementById(jutsusSettingsBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        openSidebarSettings();
+      });
+
+      document.getElementById(sidebarCloseBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        closeSidebarSettings();
+      });
+
+      document.getElementById(sidebarSaveBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        saveSidebarSettings();
+      });
+
+      document.getElementById(sidebarSelectAllBtn).addEventListener(click, (e) = {
+        e.stopPropagation();
+        selectAllSidebarElements();
+      });
+
+      document.addEventListener(keydown, handleKeyDown);
+
+      document.addEventListener(mousedown, function(e) {
+        const isSubmitClick = e.button === 0  e.button === 2;
+
+        if (!isSubmitClick  !gameRunning) return;
+
+        if (e.target.closest(button)) return;
+        if (e.target.closest(#menuElements)) return;
+        if (e.target.closest(#elementsSelect)) return;
+        if (e.target.closest(.language)) return;
+        if (e.target.closest(#settingsModal)) return;
+        if (e.target.closest(#sidebarSettingsModal)) return;
+
+        checkSequence();
+      });
+
+      document.addEventListener(contextmenu, function(e) {
+        e.preventDefault();
+      });
+    }
+
+    function setLang(newLang) {
+      lang = newLang;
+
+      document.getElementById(ptBtn).classList.toggle(active, lang === pt);
+      document.getElementById(enBtn).classList.toggle(active, lang === en);
+
+      renderAll();
+
+      if (currentJutsu) {
+        renderCurrentJutsu();
+      }
+    }
+
+    function t(key) {
+      return DATA.textos[key].[lang]  key;
+    }
+
+    function driveImg(id) {
+      if (!id) return ;
+      return httpslh3.googleusercontent.comd + id + =w200;
+    }
+
+    function renderAll() {
+      document.getElementById(gameName).textContent = DATA.config.game_name  Jutsu Game;
+      document.getElementById(controlsTitle).textContent = t(controls);
+      document.getElementById(jutsusTitle).textContent = t(jutsus);
+      document.getElementById(startBtn).textContent = t(start);
+      document.getElementById(playAgainBtn).textContent = t(play_again);
+      document.getElementById(finishedTitle).textContent = t(game_finished);
+      document.getElementById(selectElementsText).textContent = t(select_elements);
+
+      renderControls();
+      renderElements();
+      renderJutsuList();
+    }
+
+    function renderControls() {
+      const el = document.getElementById(controlsList);
+      el.innerHTML = ;
+
+      DATA.controles
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem))
+        .forEach(control = {
+          const row = document.createElement(div);
+          row.className = control-row;
+
+          row.innerHTML = `
+            img class=icon src=${driveImg(control.icone_id)}
+            div
+              strong${String(control.tecla).toUpperCase()}strong
+              — ${control[nome_ + lang]}
+            div
+          `;
+
+          el.appendChild(row);
+        });
+    }
+
+    function renderElements() {
+      const el = document.getElementById(elementsSelect);
+      el.innerHTML = ;
+
+      DATA.elementos
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem))
+        .forEach(elemento = {
+          const btn = document.createElement(button);
+          btn.className = element-btn;
+          btn.title = elemento[nome_ + lang];
+
+          if (selectedElements.includes(elemento.codigo)) {
+            btn.classList.add(selected);
+          }
+
+          btn.innerHTML = `img src=${driveImg(elemento.icone_id)}`;
+
+          btn.addEventListener(click, () = {
+            toggleElement(elemento.codigo);
+          });
+
+          el.appendChild(btn);
+        });
+    }
+
+    function toggleElement(codigo) {
+      if (selectedElements.includes(codigo)) {
+        selectedElements = selectedElements.filter(e = e !== codigo);
+      } else {
+        selectedElements.push(codigo);
+
+        DATA.jutsus
+          .filter(j = j.elemento === codigo)
+          .forEach(j = {
+            if (!selectedJutsus.includes(j.codigo)) {
+              selectedJutsus.push(j.codigo);
+            }
+          });
+      }
+
+      renderElements();
+      renderJutsuList();
+    }
+
+    function renderMenuElements() {
+      const el = document.getElementById(menuElements);
+      el.innerHTML = ;
+
+      DATA.elementos
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem))
+        .forEach(elemento = {
+          const btn = document.createElement(button);
+          btn.className = menu-element-btn;
+          btn.title = elemento[nome_ + lang];
+
+          if (selectedMenuElement === elemento.codigo) {
+            btn.classList.add(selected);
+          }
+
+          btn.innerHTML = `img src=${driveImg(elemento.icone_id)}`;
+
+          btn.addEventListener(mousedown, (e) = {
+            e.stopPropagation();
+          });
+
+          btn.addEventListener(click, (e) = {
+            e.stopPropagation();
+            selectedMenuElement = elemento.codigo;
+            renderMenuElements();
+            renderJutsuList();
+          });
+
+          el.appendChild(btn);
+        });
+    }
+
+    function renderJutsuList() {
+      const el = document.getElementById(jutsuList);
+      el.innerHTML = ;
+
+      const elementosVisiveis = DATA.elementos
+        .filter(elemento =
+          selectedSidebarFilterElements.includes(elemento.codigo) &&
+          DATA.jutsus.some(j =
+            j.elemento === elemento.codigo &&
+            selectedSidebarJutsus.includes(j.codigo)
+          )
+        )
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem));
+
+      if (elementosVisiveis.length === 0) {
+        el.innerHTML = `div style=text-aligncenter;color#d69b22;
+          ${lang === pt  Nenhum jutsu selecionado.  No jutsu selected.}
+        div`;
+        return;
+      }
+
+      elementosVisiveis.forEach(elemento = {
+        const title = document.createElement(div);
+        title.className = element-group-title;
+        title.textContent = elemento[nome_ + lang];
+        el.appendChild(title);
+
+        DATA.jutsus
+          .filter(j =
+            j.elemento === elemento.codigo &&
+            selectedSidebarJutsus.includes(j.codigo)
+          )
+          .forEach(jutsu = {
+            const row = document.createElement(div);
+            row.className = jutsu-row;
+
+            row.innerHTML = `
+              img class=icon small-icon src=${driveImg(jutsu.icone_id)}
+              div
+                div class=jutsu-name${jutsu[nome_ + lang]}div
+                div class=jutsu-seq${String(jutsu.sequencia).replaceAll(,,  )}div
+              div
+            `;
+
+            el.appendChild(row);
+          });
+      });
+    }
+
+    function openSidebarSettings() {
+      renderSidebarSettings();
+      document.getElementById(sidebarSettingsModal).classList.remove(hidden);
+    }
+
+    function closeSidebarSettings() {
+      document.getElementById(sidebarSettingsModal).classList.add(hidden);
+    }
+
+    function renderSidebarSettings() {
+      document.getElementById(sidebarSettingsTitle).textContent =
+        lang === pt  Configurar Colinha de Jutsus  Jutsus Cheat Sheet Settings;
+
+      document.getElementById(sidebarSelectAllBtn).textContent =
+        lang === pt  Selecionar Todos  Select All;
+
+      document.getElementById(sidebarSaveBtn).textContent =
+        lang === pt  Salvar  Save;
+
+      document.getElementById(sidebarCloseBtn).textContent =
+        lang === pt  Fechar  Close;
+
+      renderSidebarElementTabs();
+      renderSidebarJutsusByElement();
+    }
+
+    function renderSidebarElementTabs() {
+      const el = document.getElementById(sidebarElementTabs);
+      el.innerHTML = ;
+
+      DATA.elementos
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem))
+        .forEach(elemento = {
+          const btn = document.createElement(button);
+          btn.className = sidebar-element-tab;
+
+          if (selectedSidebarFilterElements.includes(elemento.codigo)) {
+            btn.classList.add(active);
+          }
+
+          btn.title = elemento[nome_ + lang];
+          btn.innerHTML = `img src=${driveImg(elemento.icone_id)}`;
+
+          btn.addEventListener(click, (e) = {
+            e.stopPropagation();
+
+            if (selectedSidebarFilterElements.includes(elemento.codigo)) {
+              selectedSidebarFilterElements = selectedSidebarFilterElements.filter(
+                code = code !== elemento.codigo
+              );
+            } else {
+              selectedSidebarFilterElements.push(elemento.codigo);
+            }
+
+            renderSidebarElementTabs();
+            renderSidebarJutsusByElement();
+          });
+
+          el.appendChild(btn);
+        });
+    }
+
+    function renderSidebarJutsusByElement() {
+      const el = document.getElementById(sidebarJutsusList);
+      el.innerHTML = ;
+
+      const elementosSelecionados = DATA.elementos
+        .filter(elemento = selectedSidebarFilterElements.includes(elemento.codigo))
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem));
+
+      if (elementosSelecionados.length === 0) {
+        el.innerHTML = `div style=text-aligncenter;color#d69b22;
+          ${lang === pt
+             Selecione pelo menos um elemento acima.
+             Select at least one element above.}
+        div`;
+        return;
+      }
+
+      elementosSelecionados.forEach(elemento = {
+        const title = document.createElement(div);
+        title.className = element-group-title;
+        title.textContent = elemento[nome_ + lang];
+        el.appendChild(title);
+
+        const jutsus = DATA.jutsus.filter(j = j.elemento === elemento.codigo);
+
+        jutsus.forEach(jutsu = {
+          const row = document.createElement(label);
+          row.className = sidebar-jutsu-row;
+
+          row.innerHTML = `
+            input
+              type=checkbox
+              class=sidebar-jutsu-check
+              value=${jutsu.codigo}
+              ${selectedSidebarJutsus.includes(jutsu.codigo)  checked  }
+            
+            img class=icon small-icon src=${driveImg(jutsu.icone_id)}
+            div
+              div class=jutsu-name${jutsu[nome_ + lang]}div
+              div class=jutsu-seq${String(jutsu.sequencia).replaceAll(,,  )}div
+            div
+          `;
+
+          el.appendChild(row);
+        });
+      });
+    }
+
+    function saveSidebarSettings() {
+      const visibleChecks = document.querySelectorAll(.sidebar-jutsu-check);
+
+      visibleChecks.forEach(check = {
+        if (check.checked) {
+          if (!selectedSidebarJutsus.includes(check.value)) {
+            selectedSidebarJutsus.push(check.value);
+          }
+        } else {
+          selectedSidebarJutsus = selectedSidebarJutsus.filter(code = code !== check.value);
+        }
+      });
+
+      closeSidebarSettings();
+      renderJutsuList();
+    }
+
+    function selectAllSidebarElements() {
+      document
+        .querySelectorAll(.sidebar-jutsu-check)
+        .forEach(check = {
+          check.checked = true;
+        });
+    }
+
+    function showSettingsTab(tab) {
+      const isJutsus = tab === jutsus;
+
+      document.getElementById(settingsTabJutsus).classList.toggle(active, isJutsus);
+      document.getElementById(settingsTabGame).classList.toggle(active, !isJutsus);
+
+      document.getElementById(settingsPanelJutsus).classList.toggle(hidden, !isJutsus);
+      document.getElementById(settingsPanelGame).classList.toggle(hidden, isJutsus);
+
+      document.getElementById(selectAllJutsusBtn).classList.toggle(hidden, !isJutsus);
+    }
+
+    function renderGameSettings() {
+      document.getElementById(totalJutsusInput).value = totalJutsus;
+      document.getElementById(timeModeInput).checked = timeModeEnabled;
+      document.getElementById(comboModeInput).checked = comboModeEnabled;
+      document.getElementById(comboSizeInput).value = comboSize;
+
+      document.getElementById(totalJutsusLabel).textContent =
+        lang === pt  Quantidade de rounds  Rounds per game;
+
+      document.getElementById(totalJutsusHelp).textContent =
+        lang === pt
+           Escolha quantos rounds precisam ser concluídos na partida.
+           Choose how many rounds must be completed.;
+
+      document.getElementById(timeModeLabel).textContent =
+        lang === pt  Modo tempo  Time mode;
+
+      document.getElementById(timeModeHelp).textContent =
+        lang === pt
+           Se ativado, demorar mais de 1,5s entre as teclas reinicia o jutsu atual com erro.
+           If enabled, waiting more than 1.5s between keys resets the current jutsu with an error.;
+
+      document.getElementById(comboModeLabel).textContent =
+        lang === pt  Modo combo  Combo mode;
+
+      document.getElementById(comboModeHelp).textContent =
+        lang === pt
+           Se ativado, cada round exige acertar mais de um jutsu.
+           If enabled, each round requires multiple jutsus.;
+
+      document.getElementById(comboSizeLabel).textContent =
+        lang === pt  Jutsus por round  Jutsus per round;
+
+      document.getElementById(comboSizeHelp).textContent =
+        lang === pt
+           Escolha quantos jutsus formam um combo.
+           Choose how many jutsus are required to complete one combo.;
+
+      toggleComboSizeInput();
+    }
+
+    function toggleComboSizeInput() {
+      const enabled = document.getElementById(comboModeInput).checked;
+      const input = document.getElementById(comboSizeInput);
+
+      input.disabled = !enabled;
+      input.style.opacity = enabled  1  0.45;
+    }
+
+    function openSettings() {
+      showSettingsTab(jutsus);
+      renderSettingsJutsus();
+      renderGameSettings();
+      document.getElementById(settingsModal).classList.remove(hidden);
+    }
+
+    function closeSettings() {
+      document.getElementById(settingsModal).classList.add(hidden);
+    }
+
+    function renderSettingsJutsus() {
+      const el = document.getElementById(settingsJutsuList);
+      el.innerHTML = ;
+
+      document.getElementById(settingsTitle).textContent =
+        lang === pt  Configurações de Treino  Training Settings;
+
+      document.getElementById(selectAllJutsusBtn).textContent =
+        lang === pt  Selecionar Todos  Select All;
+
+      document.getElementById(saveSettingsBtn).textContent =
+        lang === pt  Salvar  Save;
+
+      document.getElementById(closeSettingsBtn).textContent =
+        lang === pt  Fechar  Close;
+
+      const visibleJutsus = DATA.jutsus.filter(j =
+        selectedElements.includes(j.elemento)
+      );
+
+      if (visibleJutsus.length === 0) {
+        el.innerHTML = `div style=text-aligncenter;color#d69b22;
+          ${lang === pt  Selecione pelo menos um elemento.  Select at least one element.}
+        div`;
+        return;
+      }
+
+      DATA.elementos
+        .filter(elemento = selectedElements.includes(elemento.codigo))
+        .sort((a, b) = Number(a.ordem) - Number(b.ordem))
+        .forEach(elemento = {
+          const title = document.createElement(div);
+          title.className = element-group-title;
+          title.textContent = elemento[nome_ + lang];
+          el.appendChild(title);
+
+          DATA.jutsus
+            .filter(j = j.elemento === elemento.codigo)
+            .forEach(jutsu = {
+              const row = document.createElement(label);
+              row.className = settings-jutsu-row;
+
+              row.innerHTML = `
+                input
+                  type=checkbox
+                  class=settings-jutsu-check
+                  value=${jutsu.codigo}
+                  ${selectedJutsus.includes(jutsu.codigo)  checked  }
+                
+                img class=icon small-icon src=${driveImg(jutsu.icone_id)}
+                div
+                  div class=jutsu-name${jutsu[nome_ + lang]}div
+                  div class=jutsu-seq${String(jutsu.sequencia).replaceAll(,,  )}div
+                div
+              `;
+
+              el.appendChild(row);
+            });
+        });
+    }
+
+    function saveSettings() {
+      const checks = document.querySelectorAll(.settings-jutsu-check);
+
+      selectedJutsus = Array.from(checks)
+        .filter(check = check.checked)
+        .map(check = check.value);
+
+      const qty = Number(document.getElementById(totalJutsusInput).value);
+
+      if (!qty  qty  2) {
+        alert(lang === pt
+           A quantidade de jutsus deve ser maior que 1.
+           The number of jutsus must be greater than 1.
+        );
+        return;
+      }
+
+      const comboQty = Number(document.getElementById(comboSizeInput).value);
+      const comboEnabled = document.getElementById(comboModeInput).checked;
+
+      if (comboEnabled && (!comboQty  comboQty  2  comboQty  3)) {
+       alert(lang === pt
+           A quantidade de jutsus por round deve ser 2 ou 3.
+           The number of jutsus per round must be 2 or 3.
+        );
+        return;
+      }
+
+      totalJutsus = Math.floor(qty);
+      timeModeEnabled = document.getElementById(timeModeInput).checked;
+      comboModeEnabled = comboEnabled;
+      comboSize = Math.max(2, Math.min(3, Math.floor(comboQty  2)));
+      comboSize = Math.floor(comboQty  2);
+
+      updateProgress();
+      closeSettings();
+    }
+
+    function selectAllVisibleJutsus() {
+      document
+        .querySelectorAll(.settings-jutsu-check)
+        .forEach(check = {
+          check.checked = true;
+        });
+    }
+
+    function startGame() {
+      if (selectedElements.length === 0) {
+        alert(lang === pt  Selecione pelo menos um elemento.  Select at least one element.);
+        return;
+      }
+
+      availableJutsus = DATA.jutsus.filter(j =
+        selectedElements.includes(j.elemento) &&
+        selectedJutsus.includes(j.codigo)
+      );
+
+      if (availableJutsus.length === 0) {
+        alert(lang === pt
+           Selecione pelo menos um jutsu nas configurações.
+           Select at least one jutsu in settings.
+        );
+        return;
+      }
+
+      hits = 0;
+      currentInput = [];
+      jutsuDeck = [];
+      gameRunning = true;
+      startTime = Date.now();
+
+      document.getElementById(startScreen).classList.add(hidden);
+      document.getElementById(finishScreen).classList.add(hidden);
+      document.getElementById(gameScreen).classList.remove(hidden);
+
+      timerInterval = setInterval(updateTimer, 50);
+
+      nextJutsu();
+      updateProgress();
+    }
+
+    function updateTimer() {
+      const seconds = (Date.now() - startTime)  1000;
+      document.getElementById(timer).textContent = seconds.toFixed(2);
+    }
+
+    function updateProgress() {
+      document.getElementById(progress).textContent = `${hits}  ${totalJutsus}`;
+    }
+
+    function nextJutsu() {
+      currentInput = [];
+      currentCombo = [];
+      comboInputs = [];
+      currentComboIndex = 0;
+
+      const amount = comboModeEnabled  comboSize  1;
+
+      for (let i = 0; i  amount; i++) {
+        currentCombo.push(drawNextJutsuFromDeck());
+        comboInputs.push([]);
+      }
+
+      currentJutsu = currentCombo[0];
+
+      renderCurrentJutsu();
+      renderSequenceBoxes();
+    }
+
+    function drawNextJutsuFromDeck() {
+      if (jutsuDeck.length === 0) {
+        jutsuDeck = shuffleJutsus(availableJutsus);
+
+        if (jutsuDeck.length  1 && lastJutsuCode && jutsuDeck[0].codigo === lastJutsuCode) {
+          const swapIndex = jutsuDeck.findIndex(j = j.codigo !== lastJutsuCode);
+
+          if (swapIndex  0) {
+            const temp = jutsuDeck[0];
+            jutsuDeck[0] = jutsuDeck[swapIndex];
+            jutsuDeck[swapIndex] = temp;
+          }
+        }
+      }
+
+      const jutsu = jutsuDeck.shift();
+      lastJutsuCode = jutsu.codigo;
+
+      return jutsu;
+    }
+
+    function shuffleJutsus(jutsus) {
+      const shuffled = [...jutsus];
+
+      for (let i = shuffled.length - 1; i  0; i--) {
+        const randomIndex = Math.floor(Math.random()  (i + 1));
+        const temp = shuffled[i];
+        shuffled[i] = shuffled[randomIndex];
+        shuffled[randomIndex] = temp;
+      }
+
+      return shuffled;
+    }
+
+    function renderCurrentJutsu() {
+      const container = document.querySelector(.current-jutsu);
+      container.innerHTML = ;
+
+      currentCombo.forEach((jutsu, index) = {
+        const item = document.createElement(div);
+        item.className = current-combo-item;
+
+        if (index === currentComboIndex) {
+          item.classList.add(active);
+        }
+
+        if (index  currentComboIndex) {
+          item.classList.add(done);
+        }
+
+        item.innerHTML = `
+          img class=icon src=${driveImg(jutsu.icone_id)}
+          div class=current-jutsu-name${jutsu[nome_ + lang]}div
+        `;
+
+        container.appendChild(item);
+
+        if (comboModeEnabled && index  currentCombo.length - 1) {
+          const plus = document.createElement(div);
+          plus.className = combo-plus;
+          plus.textContent = +;
+          container.appendChild(plus);
+        }
+      });
+    }
+
+    function renderSequenceBoxes() {
+      const el = document.getElementById(sequenceBoxes);
+      el.innerHTML = ;
+
+      currentCombo.forEach((jutsu, comboIndex) = {
+        const group = document.createElement(div);
+        group.className = sequence-group;
+
+        if (comboIndex === currentComboIndex) {
+          group.classList.add(active);
+        }
+
+        const sequence = getJutsuSequence(jutsu);
+
+        let inputToShow = [];
+
+        if (comboIndex  currentComboIndex) {
+          inputToShow = comboInputs[comboIndex]  [];
+        } else if (comboIndex === currentComboIndex) {
+          inputToShow = currentInput;
+        }
+
+        sequence.forEach((_, index) = {
+          const box = document.createElement(div);
+          box.className = seq-box;
+
+          if (inputToShow[index]) {
+            const control = findControl(inputToShow[index]);
+
+            if (control) {
+              box.innerHTML = `img src=${driveImg(control.icone_id)}`;
+            }
+          }
+
+          group.appendChild(box);
+        });
+
+        el.appendChild(group);
+
+        if (comboModeEnabled && comboIndex  currentCombo.length - 1) {
+          const plus = document.createElement(div);
+          plus.className = combo-plus boxes-plus;
+          plus.textContent = +;
+          el.appendChild(plus);
+        }
+      });
+    }
+
+    function resetInputTimer() {
+      clearInputTimer();
+
+      if (!timeModeEnabled  !gameRunning  !currentJutsu) return;
+
+      inputTimeout = setTimeout(() = {
+        failCurrentJutsuByTime();
+      }, INPUT_TIME_LIMIT);
+    }
+
+    function clearInputTimer() {
+      if (inputTimeout) {
+        clearTimeout(inputTimeout);
+        inputTimeout = null;
+      }
+    }
+
+    function failCurrentJutsuByTime() {
+      if (!gameRunning  !currentJutsu) return;
+
+      playTone(wrong);
+      flashFeedback(wrong);
+
+      currentInput = [];
+      comboInputs[currentComboIndex] = [];
+      renderSequenceBoxes();
+
+      clearInputTimer();
+    }
+
+    function handleKeyDown(e) {
+      if (!gameRunning  !currentJutsu) return;
+
+      const key = e.key.toLowerCase();
+
+      const validControls = DATA.controles.map(c = String(c.tecla).toLowerCase());
+
+      if (!validControls.includes(key)) return;
+
+      const maxLength = getJutsuSequence(currentJutsu).length;
+
+      if (currentInput.length  maxLength) {
+        playSound(click);
+
+        currentInput.push(key);
+        renderSequenceBoxes();
+
+        resetInputTimer();
+      }
+    }
+
+    function checkSequence() {
+      clearInputTimer();
+
+      const correct = getJutsuSequence(currentJutsu);
+      const typed = currentInput;
+
+      const isCorrect =
+        correct.length === typed.length &&
+        correct.every((key, index) = key === typed[index]);
+
+      if (isCorrect) {
+        playTone(correct);
+        flashFeedback(correct);
+
+        comboInputs[currentComboIndex] = [...currentInput];
+
+        if (comboModeEnabled && currentComboIndex  currentCombo.length - 1) {
+          currentComboIndex++;
+          currentJutsu = currentCombo[currentComboIndex];
+          currentInput = [];
+
+          renderCurrentJutsu();
+          renderSequenceBoxes();
+          return;
+        }
+
+        hits++;
+        updateProgress();
+
+        if (hits = totalJutsus) {
+          finishGame();
+        } else {
+          nextJutsu();
+        }
+      } else {
+        playTone(wrong);
+        flashFeedback(wrong);
+
+        currentInput = [];
+        comboInputs[currentComboIndex] = [];
+        renderSequenceBoxes();
+      }
+    }
+
+    function finishGame() {
+      clearInputTimer();
+      gameRunning = false;
+      clearInterval(timerInterval);
+
+      const seconds = (Date.now() - startTime)  1000;
+
+      document.getElementById(finalTime).textContent = seconds.toFixed(2) + s;
+
+      document.getElementById(gameScreen).classList.add(hidden);
+      document.getElementById(finishScreen).classList.remove(hidden);
+    }
+
+    function restartToHome() {
+      clearInputTimer();
+      clearInterval(timerInterval);
+
+      gameRunning = false;
+      hits = 0;
+      currentInput = [];
+      currentJutsu = null;
+      availableJutsus = [];
+      jutsuDeck = [];
+      lastJutsuCode = null;
+      startTime = null;
+
+      document.getElementById(timer).textContent = 0.00;
+      document.getElementById(progress).textContent = `0  ${totalJutsus}`;
+      document.getElementById(sequenceBoxes).innerHTML = ;
+
+      document.getElementById(gameScreen).classList.add(hidden);
+      document.getElementById(finishScreen).classList.add(hidden);
+      document.getElementById(startScreen).classList.remove(hidden);
+    }
+
+    function resetGame() {
+      clearInputTimer();
+      document.getElementById(finishScreen).classList.add(hidden);
+      document.getElementById(startScreen).classList.remove(hidden);
+
+      hits = 0;
+      currentInput = [];
+      currentJutsu = null;
+      availableJutsus = [];
+      jutsuDeck = [];
+      lastJutsuCode = null;
+      gameRunning = false;
+    }
+
+    function getJutsuSequence(jutsu) {
+      return String(jutsu.sequencia)
+        .split(,)
+        .map(s = s.trim().toLowerCase())
+        .filter(Boolean);
+    }
+
+    function findControl(tecla) {
+      return DATA.controles.find(c = String(c.tecla).toLowerCase() === tecla);
+    }
+
+    function audioUrl(value) {
+      return value  ;
+    }
+
+    function preloadSounds() {
+      SOUNDS = {};
+
+      if (!DATA.sons) return;
+
+      Object.keys(DATA.sons).forEach(key = {
+        const url = audioUrl(DATA.sons[key]);
+
+        SOUNDS[key] = [];
+
+        for (let i = 0; i  6; i++) {
+          const audio = new Audio(url);
+          audio.preload = auto;
+          audio.volume = 0.55;
+          audio.load();
+          SOUNDS[key].push(audio);
+        }
+      });
+    }
+
+    function playSound(key) {
+      const pool = SOUNDS[key];
+
+      if (!pool  !pool.length) return false;
+
+      try {
+        const audio = pool.find(a = a.paused  a.ended)  pool[0];
+
+        audio.currentTime = 0;
+
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+          playPromise.catch(() = {});
+        }
+
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function playTone(type) {
+      const customSoundKey = type === correct  correct  wrong;
+
+      if (playSound(customSoundKey)) return;
+
+      const AudioContext = window.AudioContext  window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const audioCtx = new AudioContext();
+      const oscillator = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      oscillator.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      oscillator.type = sine;
+      oscillator.frequency.value = type === correct  660  180;
+
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.18);
+    }
+
+    function flashFeedback(type) {
+      const center = document.querySelector(.center);
+      center.classList.remove(correct-flash, wrong-flash);
+
+      const className = type === correct  correct-flash  wrong-flash;
+      center.classList.add(className);
+
+      setTimeout(() = {
+        center.classList.remove(className);
+      }, 180);
+    }
+  script
+body
+html
