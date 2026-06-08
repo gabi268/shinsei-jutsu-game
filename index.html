@@ -3,8 +3,6 @@
 <head>
 
   <title>Shinsei Jutsu Game</title>
-  <title>Shinsei Jutsu Game</title>
-
   <link rel="icon"
         type="image/png"
         href="https://drive.google.com/thumbnail?id=18ibmSaMk-DsEOp2PMwYYUD2jtAiuxYPZ&sz=w64">
@@ -817,6 +815,16 @@
               </div>
               <input id="comboSizeInput" class="setting-input" type="number" min="2" max="3" step="1">
             </div>
+
+            <div class="setting-row">
+              <div class="setting-label">
+                <strong id="lotaoModeLabel">Lotão's broken arm mode</strong>
+                <div id="lotaoModeHelp">
+                  When enabled, the last key of the sequence automatically submits the jutsu, without requiring a mouse click.
+                </div>
+              </div>
+              <input id="lotaoModeInput" class="setting-checkbox" type="checkbox">
+            </div>
           </div>
         </div>
 
@@ -847,6 +855,7 @@
     let timeModeEnabled = false;
     let comboModeEnabled = false;
     let comboSize = 2;
+    let lotaoModeEnabled = false;
 
     let inputTimeout = null;
     const INPUT_TIME_LIMIT = 1500;
@@ -1336,6 +1345,7 @@
       document.getElementById("timeModeInput").checked = timeModeEnabled;
       document.getElementById("comboModeInput").checked = comboModeEnabled;
       document.getElementById("comboSizeInput").value = comboSize;
+      document.getElementById("lotaoModeInput").checked = lotaoModeEnabled;
 
       document.getElementById("totalJutsusLabel").textContent =
         lang === "pt" ? "Quantidade de rounds" : "Rounds per game";
@@ -1368,6 +1378,14 @@
         lang === "pt"
           ? "Escolha quantos jutsus formam um combo."
           : "Choose how many jutsus are required to complete one combo.";
+
+      document.getElementById("lotaoModeLabel").textContent =
+        lang === "pt" ? "Modo braço quebrado do Lotão" : "Lotão's broken arm mode";
+      
+      document.getElementById("lotaoModeHelp").textContent =
+        lang === "pt"
+          ? "Ao ativar este modo, a última tecla da sequência envia automaticamente o jutsu, sem precisar clicar com o mouse."
+          : "When enabled, the last key of the sequence automatically submits the jutsu, without requiring a mouse click.";
 
       toggleComboSizeInput();
     }
@@ -1484,6 +1502,7 @@
       timeModeEnabled = document.getElementById("timeModeInput").checked;
       comboModeEnabled = comboEnabled;
       comboSize = Math.max(2, Math.min(3, Math.floor(comboQty || 2)));
+      lotaoModeEnabled = document.getElementById("lotaoModeInput").checked;
 
       updateProgress();
       closeSettings();
@@ -1720,8 +1739,12 @@
 
         currentInput.push(key);
         renderSequenceBoxes();
-
-        resetInputTimer();
+        
+        if (lotaoModeEnabled && currentInput.length === maxLength) {
+          checkSequence();
+        } else {
+          resetInputTimer();
+        }
       }
     }
 
