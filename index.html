@@ -859,6 +859,8 @@
 
     let inputTimeout = null;
     const INPUT_TIME_LIMIT = 1500;
+    const ANTI_MACRO_DELAY = 70;
+    let lastActionTime = 0;
 
     let currentCombo = [];
     let currentComboIndex = 0;
@@ -1001,6 +1003,8 @@
         if (e.target.closest(".language")) return;
         if (e.target.closest("#settingsModal")) return;
         if (e.target.closest("#sidebarSettingsModal")) return;
+
+        if (!canRegisterAction()) return;
 
         checkSequence();
       });
@@ -1538,6 +1542,7 @@
       hits = 0;
       currentInput = [];
       jutsuDeck = [];
+      lastActionTime = 0;
       gameRunning = true;
       startTime = Date.now();
 
@@ -1710,6 +1715,17 @@
       }
     }
 
+    function canRegisterAction() {
+      const now = performance.now();
+    
+      if (lastActionTime && now - lastActionTime < ANTI_MACRO_DELAY) {
+        return false;
+      }
+    
+      lastActionTime = now;
+      return true;
+    }
+
     function failCurrentJutsuByTime() {
       if (!gameRunning || !currentJutsu) return;
 
@@ -1719,6 +1735,8 @@
       currentInput = [];
       comboInputs[currentComboIndex] = [];
       renderSequenceBoxes();
+
+      lastActionTime = 0;
 
       clearInputTimer();
     }
@@ -1733,6 +1751,8 @@
       if (!validControls.includes(key)) return;
 
       const maxLength = getJutsuSequence(currentJutsu).length;
+
+      if (!canRegisterAction()) return;
 
       if (currentInput.length < maxLength) {
         playSound("click");
@@ -1816,6 +1836,7 @@
       availableJutsus = [];
       jutsuDeck = [];
       lastJutsuCode = null;
+      lastActionTime = 0;
       startTime = null;
 
       document.getElementById("timer").textContent = "0.00";
@@ -1838,6 +1859,7 @@
       availableJutsus = [];
       jutsuDeck = [];
       lastJutsuCode = null;
+      lastActionTime = 0;
       gameRunning = false;
     }
 
