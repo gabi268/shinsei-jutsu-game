@@ -384,6 +384,15 @@
       "ativo": true
     },
     {
+      "codigo": "water_dragon",
+      "elemento": "water",
+      "nome_pt": "Dragão d'Água",
+      "nome_en": "Water Dragon",
+      "sequencia": "x,v,z,x,v,c,x,b",
+      "icone_id": "16k9LeKE5O03nDD2CrdW3426KJhdxihUC",
+      "ativo": true
+    },
+    {
       "codigo": "twisting_sight",
       "elemento": "genjutsu",
       "nome_pt": "Visão Retorcida",
